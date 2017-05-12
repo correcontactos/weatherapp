@@ -1,0 +1,69 @@
+<div class="jumbotron" style='padding:0 0 0 0; background-color: #99c2ff'>
+  <h1>{{title}}</h1>
+  <p>Aquí puede consultar datos climáticos actualizados gracias a la interacción
+  que se ha realizado con <a href='https://www.openweathermap.org'>OpenWeatherMap.org</a> y <a href='https://maps.google.com'>Google Maps</a></p>
+  <p>Por favor digite la ciudad a buscar y presione Enter o de clic en el botón Buscar.</p>
+</div>  
+
+<div>
+    <h2 style="color: #004466;" >Consulta de Ciudad</h2>
+
+    <!--
+      <form role="form" (ngSubmit)="submitForm()" [formGroup]="queryForm" novalidate>
+      -->  
+        <div class="form-content">
+            <div class='col-xs-7' >
+                <label>Ciudad:</label>    
+                <!--
+                <input type="text" class="form-control" formControlName="q" (keypress.enter)=searchCity() placeholder="Ingrese la ciudad.">
+                -->
+                <input type="text" class="form-control" [(ngModel)]="q" (keyup.enter)=searchCity() placeholder="Ingrese la ciudad.">
+                <button class="form-control" type="submit" (click)=searchCity()>{{buttontext}}</button>
+                <div class="alert alert-{{msg[0]}}" style="text-align: center; background-color: #ccff99; " [hidden]="!updateq">
+                    {{msg[1]}}
+                </div>
+            </div>
+        </div>
+    <!--</form>-->
+    
+<div class="table-responsive" *ngFor='let city of resultcities' >
+    <h3> Resultados: <span class='badge'>{{ resultcities.length }}</span> </h3>
+    <table class="table">
+        <tr>
+            <th>Ciudad</th>
+            <td><span>{{city.name}}</span> <span class='badge'>{{city.sys.country}}</span></td>
+        </tr>
+        <tr>
+            <td>Temperatura actual</td>
+            <td class='{{temp}}' ><span>{{city.main.temp}}</span> <span class='badge'>C°</span></td>
+        </tr>
+        <tr *ngFor='let weather of city.weather'>    
+            <td>Estado del tiempo</td>
+            <td><img src="http://openweathermap.org/img/w/{{weather.icon}}.png"><span>{{weather.main}}, {{weather.description}}</span></td>
+        </tr>
+    </table>
+    <sebm-google-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom">
+        <sebm-google-map-marker [latitude]="latitude" [longitude]="longitude"></sebm-google-map-marker>
+      </sebm-google-map>   
+</div>
+
+<div class="table-responsive"  >
+<h3> Historial de ciudades consultadas: <span class='badge'>{{ historycities.length }}</span> </h3>
+  <table class="table table-striped" *ngFor='let city of historycities'>
+    <tr class="warning">
+        <th>Ciudad</th>
+        <td><span>{{city.name}}</span> <span class='badge'>{{city.sys.country}}</span></td>
+    </tr>
+    <tr>
+        <td>Temperatura</td>
+        <td><span>{{city.main.temp}}</span> <span class='badge'>C°</span></td>
+    </tr>
+    <tr *ngFor='let weather of city.weather'>    
+        <td>Estado del tiempo</td>
+        <td><img src="http://openweathermap.org/img/w/{{weather.icon}}.png"><span>{{weather.main}}, {{weather.description}}</span></td>
+    </tr>
+ </table>
+
+</div>
+
+</div>
